@@ -76,6 +76,14 @@ class TestObjects(unittest.TestCase):
         self.assertIsNone(Line(vec(0, 0, 1), vec(1, 0, 0)).intersection(Line(vec(0, 0, 0), vec(0, 1, 0))))
         self.assertIsNone(d1.intersection(Line(vec(0, 1, 0), vec(1, 1, 0))))   # parallèles
 
+    def test_relation(self):
+        c = cube(1)
+        L = lambda x, y: Line.through(c[x], c[y])
+        self.assertEqual(L("A", "B").relation(L("A", "B")), "confondues")
+        self.assertEqual(L("E", "F").relation(L("A", "B")), "parallèles")
+        self.assertEqual(L("E", "A").relation(L("A", "B")), "sécantes")
+        self.assertEqual(L("A", "B").relation(L("H", "D")), "non coplanaires")
+
     def test_plane_plane_intersection(self):
         L = Plane.from_equation(1, 0, 0, -1).intersect_plane(Plane.from_equation(0, 1, 0, -2))
         self.assertTrue(L.contains(vec(1, 2, 7)))

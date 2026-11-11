@@ -152,6 +152,14 @@ class Line:
         sol = sp.solve(list(self.A + t * self.u - other.A - s * other.u), [t, s], dict=True)
         return self.at(sol[0][t]) if sol else None
 
+    def relation(self, other: "Line") -> str:
+        """'confondues' | 'parallèles' | 'sécantes' | 'non coplanaires'."""
+        if self.is_parallel(other):
+            return "confondues" if self.contains(other.A) else "parallèles"
+        if is_zero(det3(vector(self.A, other.A), self.u, other.u)):
+            return "sécantes"
+        return "non coplanaires"
+
     def angle_with_line(self, other: "Line"):
         """Angle aigu (0..pi/2) entre deux droites, exact."""
         c = sp.simplify(abs(dot(self.u, other.u)) / (norm(self.u) * norm(other.u)))

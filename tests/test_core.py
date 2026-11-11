@@ -93,6 +93,13 @@ class TestObjects(unittest.TestCase):
         self.assertEqual(Plane(vec(0, 0, 0), vec("1/2", "1/2", "1/2")).equation(), (1, 1, 1, 0))
         self.assertEqual(Plane.through(vec(2, 0, 0), vec(0, 2, 0), vec(0, 0, 2)).equation(), (1, 1, 1, -2))
 
+    def test_equation_axis_planes(self):
+        # un seul coefficient non nul (plans parallèles aux faces du repère)
+        self.assertEqual(Plane(vec(0, 0, 0), vec(0, 0, 5)).equation(), (0, 0, 1, 0))
+        self.assertEqual(Plane(vec(0, 0, 3), vec(0, 0, -2)).equation(), (0, 0, 1, -3))
+        self.assertEqual(Plane.through(vec(0, 0, 0), vec(1, 0, 0), vec(0, 1, 0)).equation_str(), "z = 0")
+        self.assertEqual(Plane.from_equation(0, 2, 0, -4).equation(), (0, 1, 0, -2))
+
     def test_project_and_distance(self):
         p = Plane.from_equation(1, 2, 2, -3)         # |n| = 3
         P = vec(1, 1, 1)

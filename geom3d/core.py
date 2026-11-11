@@ -204,8 +204,11 @@ class Plane:
         coeffs = [sp.nsimplify(x) for x in (a, b, c, d)]
         den = sp.ilcm(*[sp.fraction(sp.Rational(x))[1] for x in coeffs if x.is_rational] or [1])
         coeffs = [x * den for x in coeffs]
-        g = sp.igcd(*[int(x) for x in coeffs if x != 0]) if all(x.is_integer for x in coeffs) else 1
-        coeffs = [x / g for x in coeffs]
+        if all(x.is_integer for x in coeffs):
+            g = 0
+            for x in coeffs:
+                g = sp.igcd(g, int(x))      # igcd(0, n) = |n| : fonctionne aussi avec un seul coefficient non nul
+            coeffs = [x / g for x in coeffs]
         first = next(x for x in coeffs if x != 0)
         if first < 0:
             coeffs = [-x for x in coeffs]
